@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/book_social_network_db
+    username: postgres
+    password: PostgreSQLPass@2025
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  mail:
+    host: localhost
+    port: 1025
+    username: prashanth
+    password: prashanth
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: "*"
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
+application:
+  security:
+    jwt:
+      secret-key: 574bd4489ea13eebdded1629c0eb94a774bf9c48ea61cdce4fa536bdd91cbcc8
+      expiration: 864000000
+
+  mailing:
+    frontend:
+      activation-url: http://localhost:4200/activate-account
+
+  file:
+    uploads:
+      photos-output-path: ./uploads
+
+server:
+  port: 8088
