@@ -24,7 +24,7 @@ services:
       - spring-demo
   bsn-api:
     container_name: bsn-api
-    image: bsn/bsn:${APP_VERSION}
+    image: ${DOCKER_USERNAME}/bsn-api:${APP_VERSION}
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/book_social_network_db
       EMAIL_HOST_NAME: ${EMAIL_HOST_NAME}
