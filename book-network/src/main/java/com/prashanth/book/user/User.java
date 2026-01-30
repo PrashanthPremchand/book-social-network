@@ -2,6 +2,7 @@ package com.prashanth.book.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.prashanth.book.book.Book;
+import com.prashanth.book.feedback.Feedback;
 import com.prashanth.book.history.BookTransactionHistory;
 import com.prashanth.book.role.Role;
 import jakarta.persistence.*;
@@ -24,7 +25,8 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "_user")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -56,6 +58,8 @@ public class User implements UserDetails, Principal {
     List<Book> books;
     @OneToMany(mappedBy = "user")
     List<BookTransactionHistory> histories;
+    @OneToMany(mappedBy = "user")
+    List<Feedback>  feedbacks;
 
 
 

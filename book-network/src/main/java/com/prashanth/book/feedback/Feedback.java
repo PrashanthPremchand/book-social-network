@@ -2,17 +2,14 @@ package com.prashanth.book.feedback;
 
 import com.prashanth.book.book.Book;
 import com.prashanth.book.common.BaseEntity;
+import com.prashanth.book.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -23,11 +20,21 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Feedback extends BaseEntity {
 
-    Double note; //1-5 star rating
+    @NotNull
+    @Min(1)
+    @Max(5)
+    @Column(nullable = false)
+    Double note;
+
+    @Column(length = 1000)
     String comment;
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id", nullable = false)
     Book book;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    User user;
 }
+
