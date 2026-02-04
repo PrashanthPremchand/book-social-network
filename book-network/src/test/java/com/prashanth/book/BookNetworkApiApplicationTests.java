@@ -2,12 +2,14 @@ package com.prashanth.book;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-//@SpringBootTest
-//class BookNetworkApiApplicationTests {
-//
-//	@Test
-//	void contextLoads() {
-//	}
-//
-//}
+@SpringBootTest
+@ActiveProfiles("test")
+class BookNetworkApiApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
