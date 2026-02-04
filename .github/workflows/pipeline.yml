@@ -147,9 +147,9 @@ jobs:
 
         run: |
           $deployPath = "$env:USERPROFILE\ci-cd"
-          cd $deployPath
+          Set-Location $deployPath
 
-          docker compose config
+          docker compose down --remove-orphans
           docker compose pull
           docker compose up -d
   
