@@ -14,8 +14,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   mail:
-#    host: ${EMAIL_HOST_NAME}
-    host: mail_dev
+    host: ${EMAIL_HOST_NAME:mail_dev}
     port: 1025
     username: ${EMAIL_USER_NAME}
     password: ${EMAIL_PASSWORD}
