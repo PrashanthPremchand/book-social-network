@@ -28,8 +28,7 @@ services:
     image: ${DOCKER_USERNAME}/bsn-api:${APP_VERSION}
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/book_social_network_db
-#      EMAIL_HOST_NAME: ${EMAIL_HOST_NAME}
-      EMAIL_HOST_NAME: mail_dev
+      EMAIL_HOST_NAME: ${EMAIL_HOST_NAME}
       EMAIL_USER_NAME: ${EMAIL_USER_NAME}
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
     ports:
