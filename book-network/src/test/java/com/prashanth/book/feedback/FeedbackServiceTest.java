@@ -63,7 +63,7 @@ class FeedbackServiceTest {
 
         Mockito.when(authentication.getPrincipal()).thenReturn(testUser);
         Mockito.when(bookRepository.findById(10)).thenReturn(Optional.of(testBook));
-        Mockito.when(feedbackMapper.toFeedback(request)).thenReturn(feedback);
+        Mockito.when(feedbackMapper.toFeedback(request,testUser, testBook)).thenReturn(feedback);
         Mockito.when(feedbackRepository.save(feedback)).thenReturn(feedback);
 
         Integer result = feedbackService.saveFeedback(request, authentication);
