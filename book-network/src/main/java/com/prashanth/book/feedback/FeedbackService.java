@@ -30,7 +30,7 @@ public class FeedbackService {
         checkBorrowable(book);
         User user = getUser(connectedUser);
         checkNotOwner(book, user);
-        Feedback feedback = feedbackMapper.toFeedback(request);
+        Feedback feedback = feedbackMapper.toFeedback(request, user, book);
         return feedbackRepository.save(feedback).getId();
 
     }
