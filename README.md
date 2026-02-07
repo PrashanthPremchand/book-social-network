@@ -1,14 +1,3 @@
-Good catch 👍 — this is an **important real-world detail**, and updating the README to reflect it actually **makes your project more professional**, not weaker.
-
-Below is an **updated README version** that clearly explains:
-
-* ❌ Why the project **cannot run fully locally**
-* ✅ How it **runs via GitHub Actions + self-hosted runner**
-* ✅ How environment variables & secrets are handled
-* ✅ What reviewers/interviewers should understand
-
-You can **replace your README with this version** (or copy the relevant sections).
-
 ---
 
 # 📚 Book Social Network – Backend API
