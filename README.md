@@ -1,11 +1,11 @@
 ---
 
-# 📚 Book Social Network – Backend API
+📚 **Book Social Network – Backend API**
 
-A production-style Spring Boot backend demonstrating JWT authentication, email verification, Dockerized deployment, and CI/CD using GitHub Actions.
+A **production-style Spring Boot backend** demonstrating **JWT authentication, email verification, Dockerized deployment, and CI/CD using GitHub Actions**.
 
 ⚠️ Important Note:
-This project is designed to run via CI/CD pipelines and self-hosted runners, not as a simple `mvn spring-boot:run` local setup.
+This project is designed to run via CI/CD pipelines and self-hosted runners, not as a simple mvn "spring-boot:run" local setup.
 
 ---
 
