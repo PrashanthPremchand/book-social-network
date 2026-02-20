@@ -1,5 +1,3 @@
----
-
 # 📚 Book Social Network – Backend API
 
 A **production-grade Spring Boot backend** for a Book Social Network platform featuring **JWT authentication**, **email verification**, **book borrowing workflows**, **feedback system**, **Dockerized deployment**, and a **fully automated CI/CD pipeline using GitHub Actions**.
