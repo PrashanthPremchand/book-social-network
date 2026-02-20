@@ -12,6 +12,20 @@ A **production-grade Spring Boot backend** for a Book Social Network platform fe
 
 ---
 
+## 🎯 Why This Project?
+
+This project was built to demonstrate how real-world backend systems are designed and deployed in production environments, including:
+
+- Secure authentication using JWT
+- Email-based account activation
+- Clean layered architecture
+- Dockerized deployment
+- CI/CD-driven delivery using GitHub Actions
+
+It intentionally avoids hardcoded secrets and local shortcuts to reflect enterprise-grade practices.
+
+---
+
 ## 🚀 Tech Stack (ATS Optimized)
 
 **Backend**
@@ -97,15 +111,29 @@ com.prashanth.book
 ### 1️⃣ Monolithic Architecture (Current)
 
 ```
-Client (Postman / Frontend)
-        ↓
-Spring Boot Application
- ├── Auth Module
- ├── Book Module
- ├── Feedback Module
- ├── Email Module
- ├── Security (JWT)
- └── PostgreSQL
+graph TD
+    subgraph Client_Layer [Client Layer]
+        A[Postman / Frontend]
+    end
+
+    subgraph Spring_Boot_App [Spring Boot Application]
+        B[Security Filter / JWT]
+        C[Auth Module]
+        D[Book Module]
+        E[Feedback Module]
+        F[Email Module]
+    end
+
+    subgraph Data_Layer [Data Layer]
+        G[(PostgreSQL)]
+    end
+
+    A --> B
+    B --> C
+    B --> D
+    B --> E
+    C --> F
+    C & D & E --> G
 ```
 
 **Why Monolith?**
@@ -137,11 +165,29 @@ PostgreSQL (per service)
 ## 🗃️ ER Diagram (High-Level)
 
 ```
-User ────< Book
- │          │
- │          └──< Feedback
- │
- └──< BookTransactionHistory >── Book
+erDiagram
+    USER ||--o{ BOOK : owns
+    USER ||--o{ BOOK_TRANSACTION_HISTORY : borrows
+    BOOK ||--o{ FEEDBACK : receives
+    BOOK ||--o{ BOOK_TRANSACTION_HISTORY : tracked_in
+    USER ||--o{ FEEDBACK : writes
+
+    USER {
+        string email
+        string password
+        boolean accountLocked
+        boolean enabled
+    }
+    BOOK {
+        string title
+        string authorName
+        boolean archieved
+        boolean shareable
+    }
+    FEEDBACK {
+        double note
+        string comment
+    }
 ```
 
 **Key Relationships**
@@ -256,15 +302,5 @@ Java Backend Developer
 Spring Boot | Microservices | Docker | CI/CD
 
 📧 Email: `prashanthpremchand@gmail.com`
-
----
-
-## ⭐ Why This Project Stands Out
-
-✔ Real-world backend architecture
-✔ Security-first design
-✔ CI/CD driven deployment
-✔ Recruiter & production ready
-✔ No shortcuts or hardcoding
 
 ---
