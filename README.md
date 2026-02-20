@@ -16,11 +16,11 @@ A **production-grade Spring Boot backend** for a Book Social Network platform fe
 
 This project was built to demonstrate how real-world backend systems are designed and deployed in production environments, including:
 
-- Secure authentication using JWT
-- Email-based account activation
-- Clean layered architecture
-- Dockerized deployment
-- CI/CD-driven delivery using GitHub Actions
+- **Secure Authentication**: Implementation of stateless security using JWT.
+- **Email-based Activation**: Realistic user onboarding with token-based verification.
+- **Clean Architecture**: Separation of concerns using a layered, maintainable structure.
+- **Containerization**: Fully Dockerized environment for consistency across stages.
+- **CI/CD Driven**: Automated delivery pipeline using GitHub Actions to reflect enterprise-grade practices.
 
 It intentionally avoids hardcoded secrets and local shortcuts to reflect enterprise-grade practices.
 
@@ -29,7 +29,6 @@ It intentionally avoids hardcoded secrets and local shortcuts to reflect enterpr
 ## 🚀 Tech Stack (ATS Optimized)
 
 **Backend**
-
 * Java 17
 * Spring Boot 3
 * Spring Security (JWT)
@@ -39,19 +38,16 @@ It intentionally avoids hardcoded secrets and local shortcuts to reflect enterpr
 * Thymeleaf (Email Templates)
 
 **Database**
-
 * PostgreSQL (Production)
 * H2 (Testing)
 
 **DevOps & Infrastructure**
-
 * Docker & Docker Compose
 * GitHub Actions (CI/CD)
 * Self-hosted GitHub Runner
 * MailDev (Local Email Testing)
 
 **Tools**
-
 * Swagger / OpenAPI
 * Maven
 * Postman
@@ -76,15 +72,20 @@ It intentionally avoids hardcoded secrets and local shortcuts to reflect enterpr
 
 This project follows **Clean Architecture + Layered Architecture** principles.
 
+
 ```
+
 Controller → Service → Repository → Database
-           ↓
-         Mapper / DTO
+↓
+Mapper / DTO
+
 ```
 
 ### 📦 Package Structure
 
+
 ```
+
 com.prashanth.book
 ├── auth          # Authentication & JWT logic
 ├── book          # Book domain (entity, service, repo)
@@ -97,12 +98,8 @@ com.prashanth.book
 ├── common        # BaseEntity, PageResponse
 ├── handler       # Global exception handling
 └── config        # Beans, OpenAPI, auditing
-```
 
-✔ Separation of concerns
-✔ Testable services
-✔ Maintainable structure
-✔ Production-ready design
+```
 
 ---
 
@@ -110,7 +107,7 @@ com.prashanth.book
 
 ### 1️⃣ Monolithic Architecture (Current)
 
-```
+```mermaid
 graph TD
     subgraph Client_Layer [Client Layer]
         A[Postman / Frontend]
@@ -134,6 +131,7 @@ graph TD
     B --> E
     C --> F
     C & D & E --> G
+
 ```
 
 **Why Monolith?**
@@ -147,15 +145,18 @@ graph TD
 
 ### 2️⃣ Microservices (Future Scope)
 
-```
-API Gateway
-    ↓
-Auth Service  → JWT
-Book Service  → Books
-Feedback Service → Reviews
-Notification Service → Emails
-    ↓
-PostgreSQL (per service)
+```mermaid
+graph TD
+    GW[API Gateway] --> Auth[Auth Service]
+    GW --> Book[Book Service]
+    GW --> Feed[Feedback Service]
+    GW --> Noti[Notification Service]
+    
+    Auth --> DB1[(PostgreSQL)]
+    Book --> DB2[(PostgreSQL)]
+    Feed --> DB3[(PostgreSQL)]
+    Noti --> DB4[(PostgreSQL)]
+
 ```
 
 > The current design intentionally supports **easy migration to microservices**.
@@ -164,7 +165,7 @@ PostgreSQL (per service)
 
 ## 🗃️ ER Diagram (High-Level)
 
-```
+```mermaid
 erDiagram
     USER ||--o{ BOOK : owns
     USER ||--o{ BOOK_TRANSACTION_HISTORY : borrows
@@ -188,6 +189,7 @@ erDiagram
         double note
         string comment
     }
+
 ```
 
 **Key Relationships**
@@ -201,24 +203,11 @@ erDiagram
 ## 📘 API Documentation (Swagger)
 
 Once deployed, Swagger UI is available at:
-
-```
-http://<HOST>:8088/swagger-ui/index.html
-```
-
-**Includes**
-
-* Auth endpoints
-* Book APIs
-* Feedback APIs
-* JWT security scheme
-* Request/response schemas
+`http://<HOST>:8088/swagger-ui/index.html`
 
 ---
 
 ## 🔄 CI/CD Pipeline (GitHub Actions)
-
-### Pipeline Stages
 
 1. **Compile**
 2. **Unit Tests**
@@ -226,52 +215,13 @@ http://<HOST>:8088/swagger-ui/index.html
 4. **Build & Push Docker Image**
 5. **Deploy via Docker Compose (Self-hosted Runner)**
 
-### Docker Image Versioning
-
-* Tagged using Maven project version
-* Also pushes `latest`
-
 ---
 
 ## 🐳 Docker & Deployment
 
-### Services Used
-
-* PostgreSQL
-* MailDev
-* Spring Boot API (Docker Image)
-
 ### ⚠️ Local Execution Disclaimer (Important)
 
-❌ This project **cannot run fully locally out-of-the-box**
-
-**Reasons:**
-
-* Environment variables are injected via **GitHub Secrets**
-* Docker image is pulled dynamically:
-
-  ```
-  image: ${DOCKER_USERNAME}/bsn-api:${APP_VERSION}
-  ```
-* Email credentials, DB passwords, Docker credentials are never hardcoded
-* CI/CD pipeline controls:
-
-  * Image version
-  * Deployment
-  * Environment variables
-
-✅ This is **intentional** and follows **production best practices**.
-
----
-
-## 🧪 Testing Strategy
-
-* ✅ Manual API testing via Postman
-* ✅ Context load test
-* 🧩 Unit tests (service-level – extensible)
-* 🔐 JWT-protected endpoint testing
-
-> Test coverage can be expanded with MockMvc & Testcontainers.
+❌ This project **cannot run fully locally out-of-the-box** because environment variables are injected via **GitHub Secrets** and Docker images are pulled dynamically. This is **intentional** to reflect production best practices.
 
 ---
 
@@ -279,28 +229,12 @@ http://<HOST>:8088/swagger-ui/index.html
 
 **Status:** ✅ Stable & Functional
 
-The project is:
-
-* Fully implemented
-* Tested via Postman
-* CI/CD automated
-* Dockerized and deployable
-
-### 🔮 Future Improvements
-
-* Integration tests (Testcontainers)
-* Observability (Prometheus + Grafana)
-* Cloud deployment (ECS / GCP / Azure)
-* Rate limiting & caching
-
 ---
 
 ## 👨‍💻 Author
 
-**Prashanth P**
-Java Backend Developer
-Spring Boot | Microservices | Docker | CI/CD
+**Prashanth P** Java Backend Developer
 
 📧 Email: `prashanthpremchand@gmail.com`
 
----
+```
