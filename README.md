@@ -1,163 +1,247 @@
+---
 
-📚 **Book Social Network – Backend API**
+# 📚 Book Social Network – Backend API
 
-A **production-style Spring Boot backend** demonstrating **JWT authentication, email verification, Dockerized deployment, and CI/CD using GitHub Actions**.
+A **production-grade Spring Boot backend** for a Book Social Network platform featuring **JWT authentication**, **email verification**, **book borrowing workflows**, **feedback system**, **Dockerized deployment**, and a **fully automated CI/CD pipeline using GitHub Actions**.
 
-⚠️ Important Note:
-This project is designed to run via CI/CD pipelines and self-hosted runners, not as a simple mvn "spring-boot:run" local setup.
+> ⚠️ **Important**: This project is designed to run via **CI/CD pipelines and Docker**, not via simple `mvn spring-boot:run`.
 
 ---
 
-## 🚀 Key Highlights
+## 🚀 Tech Stack (ATS Optimized)
 
-* JWT-based authentication & authorization
-* Email-based account activation (Thymeleaf templates)
-* Book borrowing & return workflow
-* Feedback and rating system
-* PostgreSQL persistence
+**Backend**
+
+* Java 17
+* Spring Boot 3
+* Spring Security (JWT)
+* Spring Data JPA
+* Hibernate
+* Validation (Jakarta)
+* Thymeleaf (Email Templates)
+
+**Database**
+
+* PostgreSQL (Production)
+* H2 (Testing)
+
+**DevOps & Infrastructure**
+
 * Docker & Docker Compose
-* GitHub Actions CI/CD pipeline
-* Self-hosted runner deployment
-* Production-style configuration using secrets
+* GitHub Actions (CI/CD)
+* Self-hosted GitHub Runner
+* MailDev (Local Email Testing)
+
+**Tools**
+
+* Swagger / OpenAPI
+* Maven
+* Postman
 
 ---
 
-## ⚠️ Local Execution Disclaimer (Important)
+## ✨ Core Features
 
-### ❌ This project **cannot run fully locally out-of-the-box**
-
-Reasons:
-
-1. **Critical environment variables are injected via GitHub Secrets**
-2. Docker image is pulled dynamically using:
-
-   ```yaml
-   image: ${DOCKER_USERNAME}/bsn-api:${APP_VERSION}
-   ```
-3. Email credentials, database passwords, and Docker credentials are **never hardcoded**
-4. CI/CD pipeline controls:
-
-   * Image version
-   * Deployment
-   * Environment variables
-
-➡️ This setup **intentionally mirrors real production environments**
+* 🔐 JWT-based Authentication & Authorization
+* 📧 Email Account Activation (Token-based)
+* 📚 Book Management (CRUD, Shareable, Archive)
+* 🔄 Book Borrow & Return Workflow
+* ⭐ Feedback & Rating System
+* 📄 Pagination & Filtering
+* 🧾 Global Exception Handling
+* 🐳 Fully Dockerized Setup
+* ⚙️ Automated CI/CD Pipeline
 
 ---
 
-## 🔐 Environment Variables & Secrets
+## 🧱 Clean Architecture Overview
 
-The application depends on **external secrets** injected at runtime.
+This project follows **Clean Architecture + Layered Architecture** principles.
 
-### Required Secrets (GitHub)
-
-```text
-DOCKER_USERNAME
-DOCKERHUB_TOKEN
-POSTGRES_PASSWORD
-
-EMAIL_HOST_NAME
-EMAIL_USER_NAME
-EMAIL_PASSWORD
+```
+Controller → Service → Repository → Database
+           ↓
+         Mapper / DTO
 ```
 
-These are provided **only during pipeline execution** or via a **self-hosted GitHub runner**.
+### 📦 Package Structure
 
----
-
-## 🐳 Docker Architecture
-
-### docker-compose.yml (Production-style)
-
-```yaml
-bsn-api:
-  container_name: bsn-api
-  image: ${DOCKER_USERNAME}/bsn-api:${APP_VERSION}
-  environment:
-    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/book_social_network_db
-    EMAIL_HOST_NAME: ${EMAIL_HOST_NAME}
-    EMAIL_USER_NAME: ${EMAIL_USER_NAME}
-    EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+```
+com.prashanth.book
+├── auth          # Authentication & JWT logic
+├── book          # Book domain (entity, service, repo)
+├── feedback      # Feedback & ratings
+├── history       # Book transaction history
+├── user          # User & roles
+├── security      # JWT filter & security config
+├── email         # Email service & templates
+├── file          # File storage utilities
+├── common        # BaseEntity, PageResponse
+├── handler       # Global exception handling
+└── config        # Beans, OpenAPI, auditing
 ```
 
-### Why this matters
-
-* Image version is controlled by CI/CD
-* Same compose file works across environments
-* No environment-specific code changes
+✔ Separation of concerns
+✔ Testable services
+✔ Maintainable structure
+✔ Production-ready design
 
 ---
 
-## 🔄 CI/CD Pipeline Overview
+## 🏗️ Architecture Diagrams
+
+### 1️⃣ Monolithic Architecture (Current)
+
+```
+Client (Postman / Frontend)
+        ↓
+Spring Boot Application
+ ├── Auth Module
+ ├── Book Module
+ ├── Feedback Module
+ ├── Email Module
+ ├── Security (JWT)
+ └── PostgreSQL
+```
+
+**Why Monolith?**
+
+* Faster development
+* Easier debugging
+* Ideal for early-stage systems
+* Clean separation allows future migration
+
+---
+
+### 2️⃣ Microservices (Future Scope)
+
+```
+API Gateway
+    ↓
+Auth Service  → JWT
+Book Service  → Books
+Feedback Service → Reviews
+Notification Service → Emails
+    ↓
+PostgreSQL (per service)
+```
+
+> The current design intentionally supports **easy migration to microservices**.
+
+---
+
+## 🗃️ ER Diagram (High-Level)
+
+```
+User ────< Book
+ │          │
+ │          └──< Feedback
+ │
+ └──< BookTransactionHistory >── Book
+```
+
+**Key Relationships**
+
+* User ↔ Book (Owner)
+* User ↔ BookTransactionHistory (Borrower)
+* Book ↔ Feedback (Ratings & Reviews)
+
+---
+
+## 📘 API Documentation (Swagger)
+
+Once deployed, Swagger UI is available at:
+
+```
+http://<HOST>:8088/swagger-ui/index.html
+```
+
+**Includes**
+
+* Auth endpoints
+* Book APIs
+* Feedback APIs
+* JWT security scheme
+* Request/response schemas
+
+---
+
+## 🔄 CI/CD Pipeline (GitHub Actions)
 
 ### Pipeline Stages
 
 1. **Compile**
-
-   * Maven compile
 2. **Unit Tests**
+3. **Build JAR**
+4. **Build & Push Docker Image**
+5. **Deploy via Docker Compose (Self-hosted Runner)**
 
-   * JUnit tests
-3. **Build & Push**
+### Docker Image Versioning
 
-   * Docker image built
-   * Tagged with project version
-   * Pushed to Docker Hub
-4. **Deploy**
+* Tagged using Maven project version
+* Also pushes `latest`
 
-   * Runs on **self-hosted GitHub runner**
-   * Pulls Docker image
-   * Runs `docker compose up -d`
+---
+
+## 🐳 Docker & Deployment
+
+### Services Used
+
+* PostgreSQL
+* MailDev
+* Spring Boot API (Docker Image)
+
+### ⚠️ Local Execution Disclaimer (Important)
+
+❌ This project **cannot run fully locally out-of-the-box**
+
+**Reasons:**
+
+* Environment variables are injected via **GitHub Secrets**
+* Docker image is pulled dynamically:
+
+  ```
+  image: ${DOCKER_USERNAME}/bsn-api:${APP_VERSION}
+  ```
+* Email credentials, DB passwords, Docker credentials are never hardcoded
+* CI/CD pipeline controls:
+
+  * Image version
+  * Deployment
+  * Environment variables
+
+✅ This is **intentional** and follows **production best practices**.
 
 ---
 
 ## 🧪 Testing Strategy
 
-### ✔ Manual Testing
+* ✅ Manual API testing via Postman
+* ✅ Context load test
+* 🧩 Unit tests (service-level – extensible)
+* 🔐 JWT-protected endpoint testing
 
-* Fully tested using **Postman**
-* Covers:
-
-  * Authentication
-  * JWT authorization
-  * Book lifecycle
-  * Borrow/return flow
-  * Feedback APIs
-
-### ✔ Automated Testing
-
-* JUnit 5
-* Spring Boot context load test
-* Executed in CI pipeline
+> Test coverage can be expanded with MockMvc & Testcontainers.
 
 ---
 
-## 📖 API Documentation
+## 📌 Project Status
 
-Swagger UI (available when deployed):
+**Status:** ✅ Stable & Functional
 
-```
-http://<server-ip>:8088/swagger-ui.html
-```
+The project is:
 
----
+* Fully implemented
+* Tested via Postman
+* CI/CD automated
+* Dockerized and deployable
 
-## 🧠 Design Decision (Why Not Local?)
+### 🔮 Future Improvements
 
-This project intentionally prioritizes:
-
-* Security
-* Secret management
-* CI/CD correctness
-* Production realism
-
-> **In real companies, applications do not run with hardcoded credentials or local configs.**
-
-This backend reflects:
-
-* How services are deployed
-* How secrets are managed
-* How environments are separated
+* Integration tests (Testcontainers)
+* Observability (Prometheus + Grafana)
+* Cloud deployment (ECS / GCP / Azure)
+* Rate limiting & caching
 
 ---
 
@@ -165,16 +249,18 @@ This backend reflects:
 
 **Prashanth P**
 Java Backend Developer
-📧 [prashanthpremchand@gmail.com](mailto:prashanthpremchand@gmail.com)
+Spring Boot | Microservices | Docker | CI/CD
+
+📧 Email: `prashanthpremchand@gmail.com`
 
 ---
 
-## ⭐ Project Status
+## ⭐ Why This Project Stands Out
 
-* ✅ Production-style backend
-* ✅ CI/CD enabled
-* ✅ Dockerized
-* ✅ Secure configuration
-* ⚠️ Not intended for direct local execution
+✔ Real-world backend architecture
+✔ Security-first design
+✔ CI/CD driven deployment
+✔ Recruiter & production ready
+✔ No shortcuts or hardcoding
 
 ---
